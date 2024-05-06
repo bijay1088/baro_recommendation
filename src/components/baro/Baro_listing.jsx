@@ -84,20 +84,30 @@ const BaroListing = () => {
                 <p>Since I suck at front end, sorry for horrible looking table :(</p>
 
             </div>
-            <input
-                type="text"
-                placeholder="Search..."
-                value={searchTerm}
-                onChange={handleSearch}
-                className='mb-3 form-control w-50'
-            />
+            <div className='row'>
+                <div className='col-lg-3 col-md-6 col-12'>
+                    <input
+                        type="text"
+                        placeholder="Search..."
+                        value={searchTerm}
+                        onChange={handleSearch}
+                        className='mb-3 form-control'
+                    />
+                </div>
+                <div className='col-lg-3 col-md-6 col-12'>
+                    <input type='text'
+                        placeholder='Avoid...'
+                        value={avoidTerm}
+                        onChange={handleAvoid}
+                        className='mb-3 form-control'
+                    />
+                </div>
 
-            <input type='text'
-                placeholder='Avoid...'
-                value={avoidTerm}
-                onChange={handleAvoid}
-                className='mb-3 form-control w-50'
-            />
+                
+
+                
+            </div>
+            
             <div className='responsive_table'>
                 <table className="table table-striped table-dark table-bordered table-hover" >
                     <thead>
