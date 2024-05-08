@@ -10,6 +10,7 @@ const BaroListing = () => {
     const [sortOrder, setSortOrder] = useState('asc');
     const [searchTerm, setSearchTerm] = useState('');
     const [avoidTerm, setAvoidTerm] = useState('');
+    const [searchRecommendation, setSearchRecommendation] = useState('');
 
     useEffect(() => {
         setBaroList(BaroList);
@@ -39,25 +40,44 @@ const BaroListing = () => {
         setSortOrder(newSortOrder);
     };
 
-    const handleSearch = (e) => {
-        setSearchTerm(e.target.value);
-        const filteredList = BaroList.filter(item =>
-            item.Item.toLowerCase().includes(e.target.value.toLowerCase()) ||
-            item.Type.toLowerCase().includes(e.target.value.toLowerCase()) ||
-            item.Cost.toLowerCase().includes(e.target.value.toLowerCase())
-        );
+    const handleSearchFilter = (searchValue, avoidValue, recommendationValue) => {
+        const filteredList = BaroList.filter(item => {
+            const searchMatch = (
+                item.Item.toLowerCase().includes(searchValue.toLowerCase()) ||
+                item.Type.toLowerCase().includes(searchValue.toLowerCase()) ||
+                item.Cost.toLowerCase().includes(searchValue.toLowerCase())
+            );
+    
+            const recommendationMatch = (
+                item.Recommendation.toLowerCase().includes(recommendationValue.toLowerCase())
+            );
+
+            const avoidMatch = avoidValue !== '' && (
+                !item.Item.toLowerCase().includes(avoidValue.toLowerCase()) &&
+                !item.Type.toLowerCase().includes(avoidValue.toLowerCase()) &&
+                !item.Cost.toLowerCase().includes(avoidValue.toLowerCase())
+            );
+    
+            return searchMatch && recommendationMatch && (avoidMatch || avoidValue === '');
+        });
+    
         setBaroList(filteredList);
     };
-
+    
+    const handleSearch = (e) => {
+        setSearchTerm(e.target.value);
+        handleSearchFilter(e.target.value, avoidTerm, searchRecommendation);
+    };
+    
     const handleAvoid = (e) => {
         setAvoidTerm(e.target.value);
-        const filteredList = BaroList.filter(item =>
-            !item.Item.toLowerCase().includes(e.target.value.toLowerCase()) &&
-            !item.Type.toLowerCase().includes(e.target.value.toLowerCase()) &&
-            !item.Cost.toLowerCase().includes(e.target.value.toLowerCase())
-        );
-        setBaroList(filteredList);
-    }
+        handleSearchFilter(searchTerm, e.target.value, searchRecommendation);
+    };
+    
+    const handleRecommendation = (e) => {
+        setSearchRecommendation(e.target.value);
+        handleSearchFilter(searchTerm, avoidTerm, e.target.value);
+    };
 
     /*Since I did not plan properly, I had to change the classname of button to match with recommendation. 
     Since I have long recommendation, I am gonna send it here, then this function will return the correct class name.*/
@@ -85,7 +105,7 @@ const BaroListing = () => {
 
             </div>
             <div className='row'>
-                <div className='col-lg-3 col-md-6 col-12'>
+            <div className='col-lg-3 col-md-6 col-12'>
                     <input
                         type="text"
                         placeholder="Search..."
@@ -101,6 +121,21 @@ const BaroListing = () => {
                         onChange={handleAvoid}
                         className='mb-3 form-control'
                     />
+                </div>
+
+                <div className='col-lg-3 col-md-6 col-12'>
+                    <select
+                        value={searchRecommendation}
+                        onChange={handleRecommendation}
+                        className='mb-3 form-control'
+                    >
+                        <option value="">Select Recommendation</option>
+                        <option value="Must Have">Must Have</option>
+                        <option value="Good To Have">Good To Have</option>
+                        <option value="If You Want">If You Want</option>
+                        <option value="Farmable">Farmable</option>
+                        <option value="No">No</option>
+                    </select>
                 </div>
 
                 

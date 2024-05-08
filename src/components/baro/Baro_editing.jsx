@@ -10,6 +10,7 @@ const BaroEditor = () => {
     const [sortOrder, setSortOrder] = useState('asc');
     const [searchTerm, setSearchTerm] = useState('');
     const [avoidTerm, setAvoidTerm] = useState('');
+    const [searchRecommendation, setSearchRecommendation] = useState('');
 
     useEffect(() => {
         setBaroList(BaroList);
@@ -41,6 +42,24 @@ const BaroEditor = () => {
         document.body.removeChild(link);
     };
 
+    const uploadJson = () => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        input.onchange = (e) => {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const content = e.target.result;
+                const parsedContent = JSON.parse(content);
+                setBaroList(parsedContent);
+            };
+            reader.readAsText(file);
+        };
+        input.click();
+    };
+
+
     const handleSort = (key) => {
         const newSortOrder = key === sortBy && sortOrder === 'asc' ? 'desc' : 'asc';
         const sortedList = [...baroList].sort((a, b) => {
@@ -53,29 +72,54 @@ const BaroEditor = () => {
         setSortOrder(newSortOrder);
     };
 
-    const handleSearch = (e) => {
-        setSearchTerm(e.target.value);
-        const filteredList = BaroList.filter(item =>
-            item.Item.toLowerCase().includes(e.target.value.toLowerCase()) ||
-            item.Type.toLowerCase().includes(e.target.value.toLowerCase()) ||
-            item.Cost.toLowerCase().includes(e.target.value.toLowerCase())
-        );
+    const handleSearchFilter = (searchValue, avoidValue, recommendationValue) => {
+        const filteredList = BaroList.filter(item => {
+            const searchMatch = (
+                item.Item.toLowerCase().includes(searchValue.toLowerCase()) ||
+                item.Type.toLowerCase().includes(searchValue.toLowerCase()) ||
+                item.Cost.toLowerCase().includes(searchValue.toLowerCase())
+            );
+    
+            const recommendationMatch = (
+                item.Recommendation.toLowerCase().includes(recommendationValue.toLowerCase())
+            );
+
+            const avoidMatch = avoidValue !== '' && (
+                !item.Item.toLowerCase().includes(avoidValue.toLowerCase()) &&
+                !item.Type.toLowerCase().includes(avoidValue.toLowerCase()) &&
+                !item.Cost.toLowerCase().includes(avoidValue.toLowerCase())
+            );
+    
+            return searchMatch && recommendationMatch && (avoidMatch || avoidValue === '');
+        });
+    
         setBaroList(filteredList);
     };
-
+    
+    const handleSearch = (e) => {
+        setSearchTerm(e.target.value);
+        handleSearchFilter(e.target.value, avoidTerm, searchRecommendation);
+    };
+    
     const handleAvoid = (e) => {
         setAvoidTerm(e.target.value);
-        const filteredList = BaroList.filter(item =>
-            !item.Item.toLowerCase().includes(e.target.value.toLowerCase()) &&
-            !item.Type.toLowerCase().includes(e.target.value.toLowerCase()) &&
-            !item.Cost.toLowerCase().includes(e.target.value.toLowerCase())
-        );
-        setBaroList(filteredList);
-    }
+        handleSearchFilter(searchTerm, e.target.value, searchRecommendation);
+    };
+    
+    const handleRecommendation = (e) => {
+        setSearchRecommendation(e.target.value);
+        handleSearchFilter(searchTerm, avoidTerm, e.target.value);
+    };
+    
 
 
     return (
         <div>
+
+            <div>
+                <p className='text-success'>You can also upload your own json to edit for your own use.</p>
+                <button className='btn btn-primary mb-2' onClick={uploadJson}>Upload JSON</button>
+            </div>
             <div className='row'>
                 <div className='col-lg-3 col-md-6 col-12'>
                     <input
@@ -93,6 +137,21 @@ const BaroEditor = () => {
                         onChange={handleAvoid}
                         className='mb-3 form-control'
                     />
+                </div>
+
+                <div className='col-lg-3 col-md-6 col-12'>
+                    <select
+                        value={searchRecommendation}
+                        onChange={handleRecommendation}
+                        className='mb-3 form-control'
+                    >
+                        <option value="">Select Recommendation</option>
+                        <option value="Must Have">Must Have</option>
+                        <option value="Good To Have">Good To Have</option>
+                        <option value="If You Want">If You Want</option>
+                        <option value="Farmable">Farmable</option>
+                        <option value="No">No</option>
+                    </select>
                 </div>
 
                 
