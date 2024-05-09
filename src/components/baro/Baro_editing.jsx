@@ -116,6 +116,13 @@ const BaroEditor = () => {
     return (
         <div>
 
+<div className='small_screen_warning'>
+                <h3>Small Screen/Mobile Detected</h3>
+                <p>Since I suck at front end, sorry for horrible looking table :(</p>
+                <p>Please use landscape mode to view it properly.</p>
+
+            </div>
+
             <div>
                 <p className='text-success'>You can also upload your own json to edit for your own use.</p>
                 <button className='btn btn-primary mb-2' onClick={uploadJson}>Upload JSON</button>
@@ -162,7 +169,7 @@ const BaroEditor = () => {
                 <table className="table table-striped table-dark ">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
+                            <th scope="col" className='small_screen_column_hide'>#</th>
                             <th scope="col" onClick={() => handleSort('Item')} className='sort'>
                                 Name{' '}
                                 {sortBy === 'Item' && (
@@ -177,7 +184,7 @@ const BaroEditor = () => {
                                 )}
                                 {sortBy !== 'Type' && <FontAwesomeIcon icon={faSort} />}
                             </th>
-                            <th scope="col" onClick={() => handleSort('Cost')} className='sort'>
+                            <th scope="col" onClick={() => handleSort('Cost')} className='sort small_screen_column_hide'>
                                 Cost{' '}
                                 {sortBy === 'Cost' && (
                                     <FontAwesomeIcon icon={sortOrder === 'asc' ? faSortUp : faSortDown} />
@@ -191,10 +198,10 @@ const BaroEditor = () => {
                     <tbody>
                         {baroList.map((baro, index) => (
                             <tr key={baro.id}>
-                                <th scope="row">{index + 1}</th>
+                                <th scope="row" className='small_screen_column_hide'>{index + 1}</th>
                                 <td>{baro.Item}</td>
                                 <td>{baro.Type}</td>
-                                <td>{baro.Cost}</td>
+                                <td className='small_screen_column_hide'>{baro.Cost}</td>
                                 <td>
                                     <select
                                         value={baro.Recommendation || ''}

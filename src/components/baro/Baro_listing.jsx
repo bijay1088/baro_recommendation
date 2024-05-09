@@ -11,6 +11,19 @@ const BaroListing = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [avoidTerm, setAvoidTerm] = useState('');
     const [searchRecommendation, setSearchRecommendation] = useState('');
+    const [advanceFilter, setAdvanceFilter] = useState(false);
+
+    /*These are filters for advanced*/
+    // const [showMod, setShowMod] = useState(true);
+    // const [showWeapon, setShowWeapon] = useState(true);
+    // const [showCosmetic, setShowCosmetic] = useState(true);
+    // const [showDecoration, setShowDecoration] = useState(true);
+    // const [showBoosters, setShowBoosters] = useState(true);
+    // const [showCaptura, setShowCaptura] = useState(true);
+    // const [showColor, setShowColor] = useState(true);
+    // const [showConsumable, setShowConsumable] = useState(true);
+    // const [showRelic , setShowRelic] = useState(true);
+
 
     useEffect(() => {
         setBaroList(BaroList);
@@ -79,6 +92,27 @@ const BaroListing = () => {
         handleSearchFilter(searchTerm, avoidTerm, e.target.value);
     };
 
+    // const advancedFilter = () => {
+    //     const filteredList = BaroList.filter(item => {
+    //         const modMatch = showMod && item.Type.toLowerCase().includes('mod');
+    //         const weaponMatch = showWeapon && item.Type.toLowerCase().includes('weapon');
+    //         const cosmeticMatch = showCosmetic && item.Type.toLowerCase().includes('cosmetic');
+    //         const decorationMatch = showDecoration && item.Type.toLowerCase().includes('decoration');
+    //         const boostersMatch = showBoosters && item.Type.toLowerCase().includes('boosters');
+    //         const capturaMatch = showCaptura && item.Type.toLowerCase().includes('captura');
+    //         const colorMatch = showColor && item.Type.toLowerCase().includes('color');
+    //         const consumableMatch = showConsumable && item.Type.toLowerCase().includes('consumable');
+    //         const relicMatch = showRelic && item.Type.toLowerCase().includes('relic');
+
+    //         return modMatch || weaponMatch || cosmeticMatch || decorationMatch || boostersMatch || capturaMatch || colorMatch || consumableMatch || relicMatch;
+    //     });
+
+    //     setBaroList(filteredList);
+        
+    // }
+
+
+
     /*Since I did not plan properly, I had to change the classname of button to match with recommendation. 
     Since I have long recommendation, I am gonna send it here, then this function will return the correct class name.*/
     const getButtonClass = (recommendation) => {
@@ -97,11 +131,12 @@ const BaroListing = () => {
 
 
     return (
-        <div className=''>
+        <div>
 
             <div className='small_screen_warning'>
                 <h3>Small Screen/Mobile Detected</h3>
                 <p>Since I suck at front end, sorry for horrible looking table :(</p>
+                <p>You can use landscape mode to view it properly.</p>
 
             </div>
             <div className='row'>
@@ -137,9 +172,29 @@ const BaroListing = () => {
                         <option value="No">No</option>
                     </select>
                 </div>
+{/* 
+                <div className='col-lg-3 col-md-6 col-12'>
+                    <a
+                        href='#'
+                        onClick={() => setAdvanceFilter(!advanceFilter)}
+                    >
+                        {advanceFilter ? 'Hide Filters' : 'Advance Filters'}
+                    </a>
+                </div>
 
-                
+                <div className={ ` ${advanceFilter ? 'advanced_filter_on form-check form-switch' : 'advanced_filter_off'}`}>
+                    <label htmlFor='modSwitch'>Mod</label>
+                    <input className="form-check-input" type="checkbox" role="switch" id="modSwitch"/> 
+                    <div className='col-lg-3 col-md-6 col-12'>
+                        <input type="checkbox" class="btn-check" id="mod-Check" autocomplete="off"/>
+                        <label class="btn btn-outline-success" for="mod-Check" onClick={!setShowMod}>Mod</label>
 
+                        <input type="checkbox" class="btn-check" id="weapon-Check" autocomplete="off"/>
+                        <label class="btn btn-outline-success" for="weapon-Check" onClick={!setShowWeapon}>Weapon</label>
+
+                    </div>
+                    
+                </div> */}
                 
             </div>
             
@@ -192,7 +247,8 @@ const BaroListing = () => {
             </div>
             
 
-            <p className='text-danger mt-2'>Make sure your filters are off before downloading.</p>
+        <p className='text-success mt-2'>Want to download it and use the data yourself? Just hit the download button.<br/> Want to edit this data? You can go add '/editor' after link to open the editor.</p>
+            <p className='text-danger'>Make sure your filters are off before downloading.</p>
             <button type="button" className="btn btn-primary" onClick={downloadJson}>
                 Download the data in JSON
             </button>

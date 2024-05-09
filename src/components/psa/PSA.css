@@ -5,6 +5,7 @@
     align-items: center;
     margin-top: 20px;
     color: red;
+    text-align: center;
 }
 p{
     font-size: 25px;
@@ -16,6 +17,7 @@ p{
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    
 }
 
 .psa_category{
