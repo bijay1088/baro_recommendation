@@ -43,4 +43,12 @@
         display: none;
     }
 
+
+
+
+}
+@media (max-width: 1100px){
+    .small_screen_column_hide_editor{
+        display: none;
+    }
 }
